@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Layout,Menu,Breadcrumb} from 'antd';
 
-import './App.css';
+import './App.less';
 import {Route } from 'react-router-dom'
 import Home from './views/Home/';
 import Login from './views/Login/';
