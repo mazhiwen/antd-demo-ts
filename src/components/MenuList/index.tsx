@@ -10,7 +10,7 @@ const menus = [
     text:'父级一',
     children:[
       {
-        path:'/',
+        path:'/home',
         text:'默认页面'
       },
       {

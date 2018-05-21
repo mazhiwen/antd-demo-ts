@@ -2,25 +2,21 @@ import * as React from 'react';
 import {Layout,Menu,Breadcrumb} from 'antd';
 
 import './App.css';
-import { BrowserRouter,Route } from 'react-router-dom'
-// import logo from './logo.svg';
+import {Route } from 'react-router-dom'
 import Home from './views/Home/';
+import Login from './views/Login/';
+
 import MenuList from './components/MenuList/';
 const {Header,Sider,Content}=Layout;
-// const { SubMenu } = Menu;
-const About = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
+
 
 class App extends React.Component {
   
   public render() {
+     
     return (
-      <BrowserRouter>
+      this.props["location"]["pathname"]!=='/login'?
       <Layout>
-
         <Header className="header">
           <div className="logo" />
           <Menu
@@ -43,20 +39,22 @@ class App extends React.Component {
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
             <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
+              <Breadcrumb.Item><span>{1}</span></Breadcrumb.Item>
               <Breadcrumb.Item>List</Breadcrumb.Item>
               <Breadcrumb.Item>App</Breadcrumb.Item>
             </Breadcrumb>
             <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 680 }}>
               
-              <Route exact={true} path="/" component={Home}/>
-              <Route path="/about" component={About}/>
+              <Route exact={true} path="/home" component={Home}/>
+              <Route path="/about" component={Home}/>
             </Content>
           </Layout>
         </Layout>
-
+      </Layout>:
+      <Layout><Content>
+      <Login/></Content>
       </Layout>
-      </BrowserRouter>
+      
     );
   }
 }
