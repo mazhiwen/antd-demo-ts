@@ -51,9 +51,8 @@ class App extends React.Component {
           </Layout>
         </Layout>
       </Layout>:
-      <Layout><Content>
-      <Login/></Content>
-      </Layout>
+      <Login />
+      
       
     );
   }
