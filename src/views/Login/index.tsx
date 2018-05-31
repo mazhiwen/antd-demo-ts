@@ -2,21 +2,26 @@ import * as React from 'react';
 import './index.less';
 import {Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 // import { FormComponentProps } from 'antd/lib/form';
+import {  connect } from 'react-redux';
 
 class LoginOrigin extends React.Component <any>{
+  
   public handleSubmit = (e:any) => {
     e.preventDefault();
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {
+        this.props['onIncreaseClick']();
         window.console.log('Received values of form: ', values);
       }
     });
   }
   public render(){
+    const {value} = this.props;
     const { getFieldDecorator } = this.props['form'];
     return(
       <div className="login">
         <Card>
+          {value}
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item>
               {getFieldDecorator('userName', {
@@ -53,6 +58,28 @@ class LoginOrigin extends React.Component <any>{
     )
   }
 }
-const Login = Form.create()(LoginOrigin);
+
+// Map Redux state to component props
+function mapStateToProps(state:any) {
+  return {
+      value: state.count
+  };
+}
+
+// Map Redux actions to component props
+function mapDispatchToProps(dispatch:any) {
+  return {
+      onIncreaseClick: () => dispatch({
+        type: 'increase'
+      })
+  };
+}
+
+
+
+
+
+
+const Login = connect(mapStateToProps,mapDispatchToProps)(Form.create()(LoginOrigin));
 
 export default Login
