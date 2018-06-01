@@ -3,25 +3,29 @@ import './index.less';
 import {Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 // import { FormComponentProps } from 'antd/lib/form';
 import {  connect } from 'react-redux';
-
+import localForage from '../../utils/localForage';
 class LoginOrigin extends React.Component <any>{
   
   public handleSubmit = (e:any) => {
     e.preventDefault();
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {
-        this.props['onIncreaseClick']();
+        // this.props['onIncreaseClick']();
+        localForage.setItem('userName',values.userName);
+        localForage.setItem('password',values.password);
         window.console.log('Received values of form: ', values);
       }
     });
   }
   public render(){
-    const {value} = this.props;
+    
+    
+    
+    // const {value} = this.props;
     const { getFieldDecorator } = this.props['form'];
     return(
       <div className="login">
         <Card>
-          {value}
           <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item>
               {getFieldDecorator('userName', {
@@ -59,14 +63,13 @@ class LoginOrigin extends React.Component <any>{
   }
 }
 
-// Map Redux state to component props
+
 function mapStateToProps(state:any) {
   return {
       value: state.count
   };
 }
 
-// Map Redux actions to component props
 function mapDispatchToProps(dispatch:any) {
   return {
       onIncreaseClick: () => dispatch({
