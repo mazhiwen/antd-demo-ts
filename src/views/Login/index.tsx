@@ -4,12 +4,21 @@ import {Card, Form, Icon, Input, Button, Checkbox } from 'antd';
 // import { FormComponentProps } from 'antd/lib/form';
 import {  connect } from 'react-redux';
 import localForage from '../../utils/localForage';
+import {axios} from '../../utils/axios';
 class LoginOrigin extends React.Component <any>{
   
   public handleSubmit = (e:any) => {
     e.preventDefault();
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {
+        window.console.log(axios);
+        axios.get('/users')
+          .then( (response)=> {
+            console.log(response);
+          })
+          .catch( (error)=> {
+            console.log(error);
+          });
         // this.props['onIncreaseClick']();
         localForage.setItem('userName',values.userName);
         localForage.setItem('password',values.password);
