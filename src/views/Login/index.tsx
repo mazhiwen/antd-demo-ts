@@ -6,8 +6,13 @@ import {  connect } from 'react-redux';
 import localForage from '../../utils/localForage';
 import {axios} from '../../utils/axios';
 class LoginOrigin extends React.Component <any>{
-  
-  public handleSubmit = (e:any) => {
+  constructor(props:any){
+    super(props);
+    this.state={
+      isLogin:true
+    };
+  }
+  public handleLogin = (e:any) => {
     e.preventDefault();
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {
@@ -26,6 +31,11 @@ class LoginOrigin extends React.Component <any>{
       }
     });
   }
+  public registHandler=()=>{
+    this.setState({
+      isLogin:false
+    });
+  }
   public render(){
     
     
@@ -35,7 +45,9 @@ class LoginOrigin extends React.Component <any>{
     return(
       <div className="login">
         <Card>
-          <Form onSubmit={this.handleSubmit} className="login-form">
+          {this.state['isLogin']?
+          (
+          <Form onSubmit={this.handleLogin} className="login-form">
             <Form.Item>
               {getFieldDecorator('userName', {
                 rules: [{ required: true, message: 'Please input your username!' }],
@@ -61,15 +73,20 @@ class LoginOrigin extends React.Component <any>{
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
-              Or <a href="">register now!</a>
+              Or <Button onClick={this.registHandler}>注册</Button>
             </Form.Item>
           </Form>
+          ):
+          (
+            <div>2</div>
+          )}
 
         </Card>
       </div>
       
     )
   }
+  
 }
 
 
