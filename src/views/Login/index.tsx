@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './index.less';
-import {Card, Form, Icon, Input, Button, Checkbox } from 'antd';
+import {Card, Form, Icon, Input, Button, Checkbox,notification } from 'antd';
 // import { FormComponentProps } from 'antd/lib/form';
 import {  connect } from 'react-redux';
 import localForage from '../../utils/localForage';
@@ -14,23 +14,44 @@ class LoginOrigin extends React.Component <any>{
   }
   public handleLogin = (e:any) => {
     e.preventDefault();
+    
     this.props["form"].validateFields((err:any, values:any) => {
+      console.log(values);
       if (!err) {
-        window.console.log(axios);
-        axios.get('/users')
-          .then( (response)=> {
-            console.log(response);
+        
+        axios.post('/users/login')
+          .then(res=> {
+            console.log(res);
+            notification['success']({
+              message:'提示',
+              description:'注册成功'
+            });
           })
           .catch( (error)=> {
             console.log(error);
           });
-        // this.props['onIncreaseClick']();
-        localForage.setItem('userName',values.userName);
+        localForage.setItem('account',values.account);
         localForage.setItem('password',values.password);
-        window.console.log('Received values of form: ', values);
       }
     });
   }
+  public handleRegister = (e:any) => {    
+    this.props["form"].validateFields((err:any, values:any) => {
+      if (!err) {        
+        axios.post('/users/create',values)
+          .then( res=> {
+            notification['success']({
+              message:'提示',
+              description:'注册成功'
+            });
+            this.setState({
+              isLogin:true
+            });
+          })
+      }
+    });
+  }
+  
   public registHandler=()=>{
     this.setState({
       isLogin:false
@@ -45,11 +66,10 @@ class LoginOrigin extends React.Component <any>{
     return(
       <div className="login">
         <Card>
-          {this.state['isLogin']?
-          (
+          
           <Form onSubmit={this.handleLogin} className="login-form">
             <Form.Item>
-              {getFieldDecorator('userName', {
+              {getFieldDecorator('account', {
                 rules: [{ required: true, message: 'Please input your username!' }],
               })(
                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -62,24 +82,29 @@ class LoginOrigin extends React.Component <any>{
                 <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
               )}
             </Form.Item>
-            <Form.Item>
-              {getFieldDecorator('remember', {
-                valuePropName: 'checked',
-                initialValue: true,
-              })(
-                <Checkbox>Remember me</Checkbox>
-              )}
-              <a className="login-form-forgot" href="">Forgot password</a>
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                Log in
-              </Button>
-              Or <Button onClick={this.registHandler}>注册</Button>
-            </Form.Item>
+            {this.state['isLogin']?
+            (
+              <Form.Item>
+                {getFieldDecorator('remember', {
+                  valuePropName: 'checked',
+                  initialValue: true,
+                })(
+                  <Checkbox>Remember me</Checkbox>
+                )}
+                <a className="login-form-forgot" href="">Forgot password</a>
+                <Button type="primary" htmlType="submit" className="login-form-button">
+                  Log in
+                </Button>
+                Or <Button onClick={this.registHandler}>注册</Button>
+              </Form.Item>
+            ):
+            (
+              <Form.Item>
+                <Button type="primary" onClick={this.handleRegister} className="login-form-button">确认注册</Button>
+              </Form.Item>
+            )}
           </Form>
-          ):
-          (
-            <div>2</div>
-          )}
+          
 
         </Card>
       </div>
