@@ -16,19 +16,17 @@ class LoginOrigin extends React.Component <any>{
     e.preventDefault();
     
     this.props["form"].validateFields((err:any, values:any) => {
-      console.log(values);
       if (!err) {
         
         axios.post('/users/login')
           .then(res=> {
-            console.log(res);
             notification['success']({
               message:'提示',
               description:'注册成功'
             });
           })
-          .catch( (error)=> {
-            console.log(error);
+          .catch((res)=>{
+            return false;
           });
         localForage.setItem('account',values.account);
         localForage.setItem('password',values.password);
@@ -48,6 +46,10 @@ class LoginOrigin extends React.Component <any>{
               isLogin:true
             });
           })
+          .catch((res)=>{
+            return false;
+          });
+          
       }
     });
   }
@@ -92,15 +94,13 @@ class LoginOrigin extends React.Component <any>{
                   <Checkbox>Remember me</Checkbox>
                 )}
                 <a className="login-form-forgot" href="">Forgot password</a>
-                <Button type="primary" htmlType="submit" className="login-form-button">
-                  Log in
-                </Button>
-                Or <Button onClick={this.registHandler}>注册</Button>
+                <Button type="primary" htmlType="submit" className="login-form-button">登陆</Button>
+                <Button type="primary" onClick={this.registHandler}>注册</Button>
               </Form.Item>
             ):
             (
               <Form.Item>
-                <Button type="primary" onClick={this.handleRegister} className="login-form-button">确认注册</Button>
+                <Button type="primary" onClick={this.handleRegister} className="login-form-button">确认</Button>
               </Form.Item>
             )}
           </Form>
