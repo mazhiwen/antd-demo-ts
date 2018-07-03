@@ -5,6 +5,7 @@ import {Card, Form, Icon, Input, Button, Checkbox,notification } from 'antd';
 import {  connect } from 'react-redux';
 import localForage from '../../utils/localForage';
 import {axios} from '../../utils/axios';
+
 class LoginOrigin extends React.Component <any>{
   constructor(props:any){
     super(props);
@@ -18,21 +19,27 @@ class LoginOrigin extends React.Component <any>{
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {
         
-        axios.post('/users/login')
+        axios.post('/users/login',{
+          account:values.account,
+          password:values.password
+        })
           .then(res=> {
-            notification['success']({
-              message:'提示',
-              description:'注册成功'
-            });
+            
+            localForage.setItem('account',values.account);
+            localForage.setItem('password',values.password);
+            localForage.setItem('token',res.data.token);
+            // this.context.router.history.push("/home");
           })
           .catch((res)=>{
             return false;
           });
-        localForage.setItem('account',values.account);
-        localForage.setItem('password',values.password);
+        
       }
     });
   }
+
+  
+
   public handleRegister = (e:any) => {    
     this.props["form"].validateFields((err:any, values:any) => {
       if (!err) {        
@@ -95,7 +102,7 @@ class LoginOrigin extends React.Component <any>{
                 )}
                 <a className="login-form-forgot" href="">Forgot password</a>
                 <Button type="primary" htmlType="submit" className="login-form-button">登陆</Button>
-                <Button type="primary" onClick={this.registHandler}>注册</Button>
+                <Button type="primary" style={{marginLeft:8}} onClick={this.registHandler}>注册</Button>
               </Form.Item>
             ):
             (
@@ -134,6 +141,7 @@ function mapDispatchToProps(dispatch:any) {
 
 
 
-const Login = connect(mapStateToProps,mapDispatchToProps)(Form.create()(LoginOrigin));
 
+const Login = connect(mapStateToProps,mapDispatchToProps)(Form.create()(LoginOrigin));
+// const Login = Form.create()(LoginOrigin);
 export default Login
